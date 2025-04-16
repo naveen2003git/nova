@@ -344,7 +344,7 @@ const ProductPage = () => {
             >
               <Box
                 sx={{
-                  width: isMobile? 300 : 240,
+                  width: isMobile ? 300 : 220,
                   height: 400,
                   display: "flex",
                   flexDirection: "column",
@@ -352,39 +352,38 @@ const ProductPage = () => {
                   alignItems: "center",
                   textAlign: "center",
                   px: 1,
-                  py: 1,
+                  pb: 3,
                   borderRadius: 2,
                   backgroundColor: themes.background,
+                 
+                  boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
+                  transition: "box-shadow 0.3s ease",
                   "&:hover": {
-                    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.15)",
                     cursor: "pointer",
-                  }
+                  },
                 }}
               >
-
-
-                <Box sx={{ position: "relative", width: '100%', height: 180 }}>
+                {/* Image + Badge */}
+                <Box sx={{ position: "relative", width: '100%', height: 180, top:10 }}>
                   {product?.discount > 60 && (
                     <Badge
-                      badgeContent={`${product.discount}% OFF LIMITED ONLY`}
+                      badgeContent={<Typography variant="caption">🔥 {product.discount}% OFF</Typography>}
                       color="error"
                       sx={{
                         position: "absolute",
-                        top: 20,
-                        left: 70,
-                        zIndex: 1,
+                        top: 12,
+                        left: 12,
                         "& .MuiBadge-badge": {
-                          fontSize: "0.7rem",
-                          padding: "4px 8px",
-                          borderRadius: "8px",
-                          backgroundColor: 'red',
+                          fontWeight: 600,
+                          backgroundColor: "red",
                           color: "white",
-                          whiteSpace: "nowrap"
+                          borderRadius: "8px",
+                          padding: "4px 6px",
                         },
                       }}
                     />
                   )}
-
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={180} />
                   ) : (
@@ -396,38 +395,34 @@ const ProductPage = () => {
                         width: '100%',
                         height: 180,
                         objectFit: "contain",
-                        backgroundColor: themes.background,
                         borderRadius: 1,
                       }}
                     />
                   )}
                 </Box>
 
+                {/* Product Info */}
+                <Box sx={{ px: 1, mt: 1, width: "100%" }}>
+                  <Typography variant="subtitle1" fontWeight={600} noWrap>
+                    {product?.name || <Skeleton width="80%" />}
+                  </Typography>
+                  <Box display="flex" alignItems="center" gap={0.5} sx={{ mt: 0.5 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.8rem",
+                        gap: 0.5,
+                      }}
+                    >
+                      🏷️ {product?.brand || <Skeleton width="60px" />}
+                    </Typography>
+                  </Box>
+                </Box>
 
-
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  noWrap
-                  sx={{ mt: 1, width: "100%" }}
-                >
-                  {product?.name || <Skeleton width="80%" />}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    fontSize: "0.85rem",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    width: "100%",
-                  }}
-                >
-                  {product?.brand || <Skeleton width="100%" />}
-                </Typography>
-
+                {/* Pricing & Rating */}
                 <Box
                   sx={{
                     display: "flex",
@@ -435,37 +430,30 @@ const ProductPage = () => {
                     alignItems: "center",
                     width: "100%",
                     px: 1,
-                    mt: "auto",
+                    mt: 1,
+                    borderTop: "1px solid #e0e0e0",
+                    pt: 1,
                   }}
                 >
                   <Box>
                     <Typography
-                      variant="body2"
+                      variant="caption"
                       sx={{
                         textDecoration: "line-through",
-                        color: themes.primary,
-                        fontSize: "0.85rem",
+                        color: "#999",
                       }}
                     >
-                      {product?.price != null ? `₹${product?.price}` : <Skeleton width="50px" />}
+                      ₹{product?.price || <Skeleton width="50px" />}
                     </Typography>
-
-                    <Typography variant="h6" fontWeight="bold" color="success.main">
-                      {product?.price != null && product?.discount != null ? (
-                        <>₹{(product.price - (product.price * product.discount) / 100).toFixed(2)}</>
-                      ) : (
-                        <Skeleton width="100%" />
-                      )}
+                    <Typography variant="body1" fontWeight={600} color="success.main">
+                      ₹
+                      {product?.price && product?.discount
+                        ? (product.price - (product.price * product.discount) / 100).toFixed(2)
+                        : "0.00"}
                     </Typography>
-
-                    <Typography
-                      variant="caption"
-                      color="error.main"
-                      sx={{ fontSize: "0.75rem" }}
-                    >
-                      {product?.discount != null ? `${product.discount}% OFF` : <Skeleton width="60px" />}
+                    <Typography variant="caption" color="error">
+                      🎉 {product?.discount}% OFF
                     </Typography>
-
                   </Box>
 
                   <Rating
@@ -476,6 +464,7 @@ const ProductPage = () => {
                   />
                 </Box>
 
+                {/* Buttons */}
                 <Box
                   sx={{
                     display: "flex",
@@ -486,57 +475,50 @@ const ProductPage = () => {
                     mt: 2,
                   }}
                 >
-
-                  {(product?.quantity > 0) && (product?.stock === true) ? (
+                  {(product?.quantity > 0 && product?.stock) ? (
                     <Button
                       variant="contained"
+                      startIcon={<i className="fas fa-cart-plus" />} // optional: use MUI icon here
                       sx={{
                         backgroundColor: themes.primary,
                         color: themes.text,
-                        borderColor: themes.primary,
+                        textTransform: "none",
+                        fontSize: "0.875rem",
                         "&:hover": {
                           bgcolor: themes.text,
                           color: themes.primary,
                         },
-                        textTransform: "none",
-                        fontSize: "0.875rem"
                       }}
                       onClick={() => handleCart(product?.id)}
-                      disabled={loading}
                     >
                       Add to Cart
                     </Button>
                   ) : (
-                    <Button
-                      variant="contained"
-                      sx={{ background: themes.background }}
-                      disabled
-                    >
+                    <Button variant="outlined" disabled>
                       Out of Stock
                     </Button>
                   )}
                   <Button
                     variant="outlined"
                     fullWidth
-                    color="primary"
                     onClick={() => handleViewDetails(product?.id)}
-                    disabled={loading}
                     sx={{
                       backgroundColor: themes.text,
                       color: themes.primary,
                       borderColor: themes.primary,
+                      textTransform: "none",
+                      fontSize: "0.875rem",
                       "&:hover": {
                         bgcolor: themes.primary,
                         color: themes.text,
                       },
-                      textTransform: "none",
-                      fontSize: "0.875rem"
                     }}
                   >
-                    View Details
+                    🔍 View Details
                   </Button>
                 </Box>
               </Box>
+
             </motion.div>
           </Grid>
         )

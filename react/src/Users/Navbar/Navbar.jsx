@@ -122,7 +122,7 @@ const Navbar = () => {
                   to="/"
                   sx={{ textDecoration: "none", color: "white", fontWeight: "bold" }}
                 >
-                  NovaKart
+                  NovaZon
                 </Typography>
               )}
             </Box>
