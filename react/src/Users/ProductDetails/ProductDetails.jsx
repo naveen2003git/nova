@@ -309,8 +309,8 @@ const ProductDetailPage = () => {
                       alt={product.name}
                       onLoad={() => setImageLoaded(true)}
                       sx={{
-                        maxHeight: "500px",
-                        width: "100%",
+                        maxHeight: "300px",
+                        width: "300px",
                         objectFit: "contain",
                         transition: "transform 0.5s",
                         "&:hover": {
@@ -345,11 +345,11 @@ const ProductDetailPage = () => {
               {/* Product Details Section */}
               <Grid item xs={12} md={7}>
                 <Box sx={{ p: { xs: 3, md: 5 },marginTop:6 }}>
-                  <Box mb={1}>
+                  <Box mb={1} sx={{width:500}}>
                     <Typography variant="subtitle1" fontWeight={600} color={themes.primary}>
                       {product.brand}
                     </Typography>
-                    <Typography variant="h4" fontWeight="bold" gutterBottom>
+                    <Typography variant="h5" fontWeight="bold" gutterBottom>
                       {product.name}
                     </Typography>
                     
@@ -421,7 +421,7 @@ const ProductDetailPage = () => {
                   </Box>
 
                   {/* Description */}
-                  <Typography variant="body1" color="text.secondary" paragraph>
+                  <Typography variant="body1" color="text.secondary" paragraph sx={{width:700}}>
                     {product.description}
                   </Typography>
 
