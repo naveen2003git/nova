@@ -135,7 +135,7 @@ const Navbar = () => {
                 to="/"
                 sx={{ textDecoration: "none", color: "white", fontWeight: "bold" }}
               >
-                MyShop
+                NovaZon
               </Typography>
             )}
 

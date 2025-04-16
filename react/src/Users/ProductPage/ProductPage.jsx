@@ -514,7 +514,7 @@ const ProductPage = () => {
                       },
                     }}
                   >
-                    🔍 View Details
+                    View Details
                   </Button>
                 </Box>
               </Box>
