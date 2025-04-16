@@ -344,7 +344,7 @@ const ProductDetailPage = () => {
 
               {/* Product Details Section */}
               <Grid item xs={12} md={7}>
-                <Box sx={{ p: { xs: 3, md: 5 } }}>
+                <Box sx={{ p: { xs: 3, md: 5 },marginTop:6 }}>
                   <Box mb={1}>
                     <Typography variant="subtitle1" fontWeight={600} color={themes.primary}>
                       {product.brand}
