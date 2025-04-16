@@ -13,7 +13,7 @@ import {
 import Footer from '../../component/Footer';
 import { useNavigate } from 'react-router-dom';
 
-import { ThemeContext } from '../../Admin/ThemeContext/ThemeContext';
+import { ThemeContext } from '../../ThemeContext/ThemeContext';
 
 const OrdersPage = () => {
     const navigate = useNavigate();

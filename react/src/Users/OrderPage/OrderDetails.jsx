@@ -17,7 +17,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { ThemeContext } from '../../Admin/ThemeContext/ThemeContext';
+import { ThemeContext } from '../../ThemeContext/ThemeContext';
 import { CurrencyRupee } from '@mui/icons-material';
 
 const OrderDetails = () => {

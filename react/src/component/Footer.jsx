@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, Typography, Link, Grid, Divider } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn, WhatsApp } from '@mui/icons-material';
-import { ThemeContext } from '../Admin/ThemeContext/ThemeContext';
+import { ThemeContext } from '../ThemeContext/ThemeContext';
 
 const Footer = () => {
   const themes = useContext(ThemeContext);

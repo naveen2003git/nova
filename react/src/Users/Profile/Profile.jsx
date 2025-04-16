@@ -11,7 +11,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { getUserProfile, profileUpdate } from '../../Utlies/service';
-import { ThemeContext } from '../../Admin/ThemeContext/ThemeContext';
+import { ThemeContext } from '../../ThemeContext/ThemeContext';
 
 const Profile = () => {
   const themes = useContext(ThemeContext)

@@ -35,7 +35,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { auth } from "../../Utlies/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { ThemeContext } from "../../Admin/ThemeContext/ThemeContext";
+import { ThemeContext } from "../../ThemeContext/ThemeContext";
 
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);

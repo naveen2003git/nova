@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Dialog, Box, Typography, Button, Divider, Stack, Slide } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../Admin/ThemeContext/ThemeContext";
+import { ThemeContext } from "../ThemeContext/ThemeContext";
 
 // Slide transition for smooth entrance
 const Transition = React.forwardRef(function Transition(props, ref) {

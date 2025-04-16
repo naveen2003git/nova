@@ -14,7 +14,7 @@ import {
 // eslint-disable-next-line no-unused-vars
 import { useSpring, animated } from "react-spring";
 import Footer from "../../component/Footer";
-import { ThemeContext } from "../../Admin/ThemeContext/ThemeContext";
+import { ThemeContext } from "../../ThemeContext/ThemeContext";
 
 const About = () => {
   // Title animation

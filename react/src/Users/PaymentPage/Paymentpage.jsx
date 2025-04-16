@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProducts, StorePayment, updateProductStockInFirestore } from '../../Utlies/service';
-import { ThemeContext } from '../../Admin/ThemeContext/ThemeContext';
+import { ThemeContext } from '../../ThemeContext/ThemeContext';
 
 const steps = ['Order Summary', 'Delivery Address', 'Payment Options'];
 

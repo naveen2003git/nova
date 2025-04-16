@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from '../../Utlies/firebase';
+import { db } from '../Utlies/firebase';
 
 export const ThemeContext = createContext();
 

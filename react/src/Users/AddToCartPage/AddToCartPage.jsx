@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../../component/Footer';
   // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
-import { ThemeContext } from '../ThemeContext/ThemeContext';
+import { ThemeContext } from '../../ThemeContext/ThemeContext';
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);

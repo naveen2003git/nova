@@ -26,7 +26,7 @@ import {
 import { auth, db } from "../../Utlies/firebase";
 import { cartProduct, productReview } from "../../Utlies/service";
 import LoginDialog from "../../component/LoginDialog";
-import { ThemeContext } from "../../Admin/ThemeContext/ThemeContext";
+import { ThemeContext } from "../../ThemeContext/ThemeContext";
 
 const ProductDetailPage = () => {
   const { id } = useParams();

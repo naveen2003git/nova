@@ -1,3 +1,4 @@
+// Same imports (no change)
 import React, { useState, useEffect, useContext } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -24,12 +25,10 @@ import {
   Alert,
   InputAdornment,
   CircularProgress,
-  ThemeProvider,
   IconButton
 } from "@mui/material";
 import { Email, Lock, Visibility, VisibilityOff } from "@mui/icons-material";
-import { ThemeContext } from "../Admin/ThemeContext/ThemeContext";
-
+import { ThemeContext } from "../ThemeContext/ThemeContext";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +37,6 @@ const Auth = () => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -48,7 +46,6 @@ const Auth = () => {
   const themes = useContext(ThemeContext);
 
   useEffect(() => {
-    // Clear form when switching tabs
     setEmail("");
     setPassword("");
     setConPassword("");
@@ -67,11 +64,7 @@ const Auth = () => {
     setError("");
     try {
       if (isSignup) {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const uid = userCredential.user.uid;
 
         if (role === "admin") {
@@ -99,11 +92,7 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const uid = userCredential.user.uid;
 
         const userDoc = await getDoc(doc(db, "users", uid));
@@ -147,35 +136,28 @@ const Auth = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: themes.background,
-        padding: 2,
+        background: `linear-gradient(135deg, ${themes.primary}22, ${themes.primary}44)`,
+        p: 2,
       }}
     >
       <Container maxWidth="sm">
         <Paper
-          elevation={3}
+          elevation={8}
           sx={{
-            p: 4,
-            borderRadius: 2,
-            border: "1px solid #e0e0e0",
+            backdropFilter: "blur(12px)",
+            backgroundColor: "#ffffffcc",
+            p: 5,
+            borderRadius: 5,
+            boxShadow: `0 8px 24px ${themes.primary}33`,
             position: "relative",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "4px",
-              backgroundColor: themes.primary,
-            },
+            overflow: "hidden",
+            border: `1px solid ${themes.primary}22`
           }}
         >
           <Typography
             variant="h4"
-            component="h1"
             align="center"
-            gutterBottom
-            sx={{ mb: 3, color: themes.primary }}
+            sx={{ color: themes.primary, fontWeight: 600, mb: 2 }}
           >
             {isSignup ? "Create Account" : "Welcome Back"}
           </Typography>
@@ -183,160 +165,149 @@ const Auth = () => {
           <Tabs
             value={tabValue}
             onChange={(e, newValue) => setTabValue(newValue)}
-            variant="fullWidth"
+            centered
+            textColor="primary"
+            indicatorColor="primary"
             sx={{
-              mb: 4,
-              "& .MuiTabs-indicator": {
-                backgroundColor: themes.primary, // Underline color
-              },
+              mb: 3,
+              "& .MuiTab-root": {
+                fontWeight: "bold",
+                fontSize: "16px",
+              }
             }}
           >
-            <Tab
-              label="Sign In"
-              sx={{
-                color: themes.primary,
-                "&.Mui-selected": {
-                  color: themes.primary, // Active tab text color
-                  fontWeight: "bold",     // Optional: make it stand out
-                },
-              }}
-            />
-            <Tab
-              label="Sign Up"
-              sx={{
-                color: themes.primary,
-                "&.Mui-selected": {
-                  color: themes.primary,
-                  fontWeight: "bold",
-                },
-              }}
-            />
+            <Tab label="Sign In" />
+            <Tab label="Sign Up" />
           </Tabs>
 
-
           {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
+            <Alert severity="error" sx={{ mb: 2 }}>
               {error}
             </Alert>
           )}
 
-          <Box component="form" onSubmit={(e) => { e.preventDefault(); handleAuth(); }} sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAuth();
+            }}
+          >
             <TextField
-              margin="normal"
-              required
+              label="Email"
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              required
+              margin="normal"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Email sx={{ color: themes.primary }} />
+                    <Email />
                   </InputAdornment>
                 ),
               }}
-              sx={{ mb: 2 }}
+              sx={{ borderRadius: 2 }}
             />
 
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
               label="Password"
+              fullWidth
+              required
+              margin="normal"
               type={showPassword ? "text" : "password"}
-              id="password"
-              autoComplete={isSignup ? "new-password" : "current-password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             {isSignup && (
               <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="confirmPassword"
                 label="Confirm Password"
+                fullWidth
+                required
+                margin="normal"
                 type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                autoComplete="new-password"
                 value={conPassword}
                 onChange={(e) => setConPassword(e.target.value)}
-                sx={{ mb: 2 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             )}
-
 
             <Button
               type="submit"
               fullWidth
-              variant="contained"
               size="large"
               disabled={loading}
               sx={{
-                mt: 2,
-                mb: 2,
+                mt: 3,
                 py: 1.5,
-                color: themes.text,
-                backgroundColor: themes.primary
+                fontWeight: 600,
+                fontSize: "1rem",
+                backgroundColor: themes.primary,
+                color: "#fff",
+                borderRadius: 3,
+                "&:hover": {
+                  backgroundColor: `${themes.primary}dd`,
+                  boxShadow: `0 0 12px ${themes.primary}55`,
+                },
               }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
-              ) : isSignup ? (
-                "Create Account"
-              ) : (
-                "Sign In"
-              )}
+              ) : isSignup ? "Create Account" : "Sign In"}
             </Button>
 
             {!isSignup && (
-              <Box textAlign="center" mt={1}>
+              <Box mt={2} textAlign="center">
                 <Button
+                  variant="text"
                   onClick={handleResetPassword}
-                  size="small"
-                  variant="outlined"
                   sx={{
-                    textTransform: "none",
+                    fontSize: "0.9rem",
                     color: themes.primary,
-                    borderColor: themes.primary,
-                    borderRadius: 2,
-                    p: 2,
-                    fontWeight: 500,
-                    transition: "all 0.3s ease",
-                    '&:hover': {
-                      backgroundColor: `${themes.primary}10`,
+                    textTransform: "none",
+                    "&:hover": {
+                      textDecoration: "underline",
                     },
                   }}
                 >
-                  Forgot password?
+                  Forgot Password?
                 </Button>
-
               </Box>
             )}
 
-            <Box sx={{ mt: 4, textAlign: "center" }}>
-              <Typography variant="body2" color="text.secondary">
-                {isSignup
-                  ? "Already have an account?"
-                  : "Don't have an account?"}
+            <Box mt={4} textAlign="center">
+              <Typography variant="body2">
+                {isSignup ? "Already have an account?" : "Don't have an account?"}
                 <a
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevents page jump
+                    e.preventDefault();
                     setTabValue(isSignup ? 0 : 1);
                   }}
                   style={{
                     color: themes.primary,
-                    marginLeft: '8px',
-                    fontWeight: 'bold',
-                    textDecoration: 'none',
-                    textTransform: 'none',
-                    cursor: 'pointer',
+                    marginLeft: 8,
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    textDecoration: "none",
                   }}
                 >
                   {isSignup ? "Sign In" : "Sign Up"}

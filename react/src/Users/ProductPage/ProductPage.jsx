@@ -38,7 +38,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import LoginDialog from "../../component/LoginDialog";
 import Footer from "../../component/Footer";
-import { ThemeContext } from "../../Admin/ThemeContext/ThemeContext";
+import { ThemeContext } from "../../ThemeContext/ThemeContext";
 
 
 const ProductPage = () => {
