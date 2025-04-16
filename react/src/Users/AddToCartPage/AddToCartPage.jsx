@@ -12,15 +12,31 @@ import {
   Alert,
   CircularProgress,
   Tooltip,
+  Paper,
+  Grid,
+  Divider,
+  Card,
+  CardMedia,
+  CardContent,
+  Badge,
+  Fade,
 } from '@mui/material';
-import { Add, Remove, Delete } from '@mui/icons-material';
+import {
+  Add,
+  Remove,
+  DeleteOutline,
+  ShoppingCart,
+  LocalShipping,
+  Payment,
+  CheckCircleOutline,
+} from '@mui/icons-material';
 import { getUserCartProducts, removeCartItem } from '../../Utlies/service';
 import { auth } from '../../Utlies/firebase';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../component/Footer';
-  // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { ThemeContext } from '../../ThemeContext/ThemeContext';
+import ProductCard from './ProductCard';
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -105,7 +121,7 @@ const AddToCartPage = () => {
     try {
       await removeCartItem(id, user);
       fetchData();
-      showSnackbar('Item removed!', 'success');
+      showSnackbar('Item removed from cart!', 'success');
     } catch (error) {
       showSnackbar('Failed to remove item.', error);
     }
@@ -121,13 +137,12 @@ const AddToCartPage = () => {
     // Only include in-stock items in total
     return items.reduce((total, item) => {
       const stockInfo = productQty.find(p => p.id === item.id);
-      if (stockInfo && stockInfo.quantity > 0 && stockInfo.stock===true) {
+      if (stockInfo && stockInfo.quantity > 0 && stockInfo.stock === true) {
         return total + calculateDiscountedPrice(item.price, item.discount) * item.quantity;
       }
       return total;
     }, 0);
   };
-
 
   const isCheckoutDisabled = () => {
     const selectedItems = cartItems.filter(i => i.selected);
@@ -143,7 +158,7 @@ const AddToCartPage = () => {
     const selectedItems = cartItems.filter(i => i.selected);
     const itemsToCheck = selectedItems.length > 0 ? selectedItems : cartItems;
 
-    // 🔴 Remove out-of-stock items
+    // Remove out-of-stock items
     const validItems = itemsToCheck.filter(item => {
       const stockInfo = productQty.find(p => p.id === item.id);
       return stockInfo && stockInfo.quantity > 0 && stockInfo.stock;
@@ -169,202 +184,148 @@ const AddToCartPage = () => {
     });
   };
 
-
   const renderCartItems = () => {
     return cartItems.map((item, i) => {
       const stockInfo = productQty.find(p => p.id === item.id);
       const isOutOfStock = Number(stockInfo?.quantity) === 0;
       const stock = stockInfo?.stock === false;
-      console.log(isOutOfStock);
-      console.log(stockInfo);
-      console.log(stock,'stock');
-      
-      
-      
 
+      
       return (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 2,
-              mb: 2,
-              p: 2,
-              borderBottom: '1px solid #ddd',
-              flexDirection: { xs: 'column', sm: 'row' },
-              opacity: isOutOfStock || stock ? 0.5 : 1, // fade only
-            }}
-          >
-            <Box
-              component="img"
-              src={item.image}
-              alt={item.name}
-              sx={{
-                width: 100,
-                height: 100,
-                objectFit: 'contain',
-                backgroundColor: themes.background,
-                borderRadius: 1,
-              }}
-            />
-            <Box flex={1}>
-              <Typography fontWeight="bold">{item.name}</Typography>
-              <Typography fontSize="0.9rem" color="text.secondary">
-                {item.description}
-              </Typography>
-
-              <Box mt={1} display="flex" alignItems="center" gap={1}>
-                <Typography color="text.secondary">
-                  <s>₹{item.price}</s>
-                </Typography>
-                <Chip label={`${item.discount}% OFF`} size="small" color="success" />
-              </Box>
-
-              <Typography variant="h6" color="primary" mt={1}>
-                ₹{calculateDiscountedPrice(item.price, item.discount).toFixed(2)}
-              </Typography>
-
-              <Box display="flex" alignItems="center" mt={1} gap={1}>
-                <Tooltip title="Decrease quantity">
-                  <span>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleQuantityChange(item.id, -1)}
-                      disabled={isOutOfStock || item.quantity === 1}
-                    >
-                      <Remove fontSize="small" />
-                    </IconButton>
-                  </span>
-                </Tooltip>
-
-                <Typography>{item.quantity}</Typography>
-
-                <Tooltip title="Increase quantity">
-                  <span>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleQuantityChange(item.id, 1)}
-                      disabled={isOutOfStock || stock}
-                    >
-                      <Add fontSize="small" />
-                    </IconButton>
-                  </span>
-                </Tooltip>
-              </Box>
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={item.selected}
-                    onChange={e => handleCheckboxChange(item.id, e.target.checked)}
-                    disabled={isOutOfStock || stock}
-                    sx={{
-                      color: themes.primary,
-                      '&.Mui-checked': {
-                        color: themes.primary,
-                      },
-                    }}
-                  />
-                }
-                label={
-                  isOutOfStock || stock ? (
-                    <Typography variant="caption" color="error">
-                      Out of Stock
-                    </Typography>
-                  ) : (
-                    'Select'
-                  )
-                }
-                sx={{ mt: 1 }}
-              />
-            </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: { xs: 'flex-start', sm: 'flex-end' },
-                mt: { xs: 1, sm: 0 },
-              }}
-            >
-              <Tooltip title="Remove item from cart">
-                <IconButton color="error" onClick={() => handleRemoveItem(item.id)}>
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </Box>
-        </motion.div>
+        <ProductCard
+        key={item.id}
+          item={item}
+          i={i}
+          handleCheckboxChange={handleCheckboxChange}
+          handleQuantityChange={handleQuantityChange}
+          handleRemoveItem={handleRemoveItem}
+          isOutOfStock={isOutOfStock}
+          stock={stock}
+          themes={themes}
+        />
       );
     });
   };
+  
+  const cartItem = cartItems.filter(p => p.stock);
 
   return (
-    <div>
-      <Container sx={{ py: 4 }}>
+    <Box sx={{ backgroundColor: '#f7f9fc', minHeight: '100vh' }}>
+      <Container maxWidth="lg" sx={{ py: 5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+          <ShoppingCart sx={{ fontSize: 32, mr: 2, color: themes.primary || '#1976d2' }} />
+          <Typography variant="h4" fontWeight="bold">
+            Your Shopping Cart
+          </Typography>
+        </Box>
+        
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="200px">
-            <Container sx={{ marginTop: 4, textAlign: 'center' }}>
-              <CircularProgress />
-              <Typography variant="h6" sx={{ marginTop: 2 }}>
-                Loading your Cart...
-              </Typography>
-            </Container>
-          </Box>
+          <Paper elevation={2} sx={{ p: 5, textAlign: 'center', borderRadius: 2 }}>
+            <CircularProgress size={60} thickness={4} />
+            <Typography variant="h6" sx={{ mt: 3, fontWeight: 500 }}>
+              Loading your cart items...
+            </Typography>
+          </Paper>
         ) : cartItems.length === 0 ? (
-          <>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
-              🛒 Your Cart
+          <Paper elevation={2} sx={{ p: 5, textAlign: 'center', borderRadius: 2 }}>
+            <ShoppingCart sx={{ fontSize: 80, color: '#9e9e9e', mb: 2 }} />
+            <Typography variant="h5" fontWeight="medium" gutterBottom>
+              Your cart is empty
             </Typography>
-            <Typography>Your cart is empty.</Typography>
-          </>
-        ) : (
-          <>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
-              🛒 Your Cart
+            <Typography color="text.secondary" gutterBottom>
+              Looks like you haven't added any products to your cart yet.
             </Typography>
-            {renderCartItems()}
-
-            <Box
-              sx={{
-                mt: 4,
-                p: 3,
-                border: '1px solid #ccc',
-                borderRadius: 2,
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                backgroundColor: '#f9f9f9',
-              }}
+            <Button 
+              variant="contained" 
+              color="primary" 
+              sx={{ mt: 3 }}
+              onClick={() => navigate('/')}
             >
-              <Box>
-                <Typography variant="h6" fontWeight="bold">
-                  🧾 Total: ₹{getTotal().toFixed(2)}
-                </Typography>
-                <Typography fontSize="0.8rem" color="text.secondary">
-                  {cartItems.filter(i => i.selected).length > 0
-                    ? `${cartItems.filter(i => i.selected).length} item(s) selected`
-                    : `(No items selected — all included by default)`}
-                </Typography>
-              </Box>
-
-              <Button
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={handleCheckout}
-                disabled={isCheckoutDisabled()}
-                sx={{ mt: { xs: 2, sm: 0 } }}
-              >
-                Proceed to Checkout
-              </Button>
+              Continue Shopping
+            </Button>
+          </Paper>
+        ) : (
+          <Box sx={{ display: 'flex', flexDirection: {xs: 'column', md: 'row'}, gap: 3 }}>
+            <Box sx={{ flex: 3 }}>
+              {renderCartItems()}
             </Box>
-          </>
+            
+            <Box sx={{ flex: 1 }}>
+              <Paper 
+                elevation={3} 
+                sx={{ 
+                  p: 3, 
+                  borderRadius: 2,
+                  position: 'sticky',
+                  top: 160,
+                }}
+              >
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Order Summary
+                </Typography>
+                
+                <Divider sx={{ my: 2 }} />
+                
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography>Items {cartItem.length }</Typography>
+                  <Typography>₹{getTotal().toFixed(2)}</Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography>Shipping</Typography>
+                  <Typography color="success.main">Free</Typography>
+                </Box>
+                
+                <Divider sx={{ my: 2 }} />
+                
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                  <Typography variant="h6" fontWeight="bold">Total</Typography>
+                  <Typography variant="h6" fontWeight="bold" color="primary">
+                    ₹{getTotal().toFixed(2)}
+                  </Typography>
+                </Box>
+                
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  onClick={handleCheckout}
+                  disabled={isCheckoutDisabled()}
+                  startIcon={<Payment />}
+                  sx={{ 
+                    py: 1.5,
+                    borderRadius: 2,
+                    fontWeight: 'bold',
+                    background: themes.primary || 'primary',
+                    '&:hover': {
+                      background: themes.primary ? `${themes.primary}dd` : '',
+                    }
+                  }}
+                >
+                  Checkout
+                </Button>
+                
+                <Box sx={{ mt: 3, p: 2, bgcolor: 'rgba(76, 175, 80, 0.1)', borderRadius: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <LocalShipping fontSize="small" color="success" sx={{ mr: 1 }} />
+                    <Typography variant="body2" fontWeight="medium" color="success.main">
+                      Free shipping on all orders!
+                    </Typography>
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    Items usually ship within 24 hours.
+                  </Typography>
+                </Box>
+                
+                {cartItems.filter(i => i.selected).length > 0 && (
+                  <Typography fontSize="0.8rem" color="text.secondary" sx={{ mt: 2, textAlign: 'center' }}>
+                    {`${cartItems.filter(i => i.selected).length} item(s) selected`}
+                  </Typography>
+                )}
+              </Paper>
+            </Box>
+          </Box>
         )}
       </Container>
 
@@ -373,10 +334,12 @@ const AddToCartPage = () => {
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        TransitionComponent={Fade}
       >
         <Alert
           onClose={() => setSnackbarOpen(false)}
           severity={snackbarSeverity}
+          variant="filled"
           sx={{ width: '100%' }}
         >
           {snackbarMessage}
@@ -384,7 +347,7 @@ const AddToCartPage = () => {
       </Snackbar>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 
