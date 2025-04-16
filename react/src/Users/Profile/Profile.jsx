@@ -70,113 +70,111 @@ const Profile = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 5 }}>
-      <Box
+    <Box
+      sx={{
+        p: 4,
+        borderRadius: 4,
+        boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+        backgroundColor: '#fff',
+        position: 'relative',
+      }}
+    >
+      <Typography variant="h5" fontWeight={600}>
+        Profile Information
+      </Typography>
+
+      {isEditing ? (
+        <Box component="form" noValidate autoComplete="off" sx={{ mt: 3 }}>
+          <TextField
+            label="Email"
+            value={profile.email}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
+          <TextField
+            label="Full Name"
+            name="fullName"
+            value={profile.fullName}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Date of Birth"
+            name="dob"
+            type="date"
+            value={profile.dob}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Mobile Number"
+            name="mobile"
+            value={profile.mobile}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!mobileError}
+            helperText={mobileError}
+          />
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={handleUpdate}
+            fullWidth
+            sx={{ mt: 3, borderRadius: 2, py: 1.2, fontWeight: 500, background: themes.primary }}
+            disabled={!!mobileError}
+          >
+            Save Profile
+          </Button>
+        </Box>
+      ) : (
+        <Box sx={{ mt: 3 }}>
+          <ProfileField label="Email" value={profile.email} />
+          <ProfileField label="Full Name" value={profile.fullName} />
+          <ProfileField label="Date of Birth" value={profile.dob} />
+          <ProfileField label="Mobile Number" value={profile.mobile} />
+        </Box>
+      )}
+    </Box>
+
+    {/* FAB for Edit */}
+    {!isEditing && (
+      <Fab
+        aria-label="edit"
+        onClick={() => setIsEditing(true)}
         sx={{
-          p: 4,
-          borderRadius: 4,
-          boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
-          backgroundColor: '#fff',
-          position: 'relative',
+          background: themes.primary,
+          color: themes.text,
+          position: 'fixed',
+          bottom: 32,
+          right: 32,
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
+          "&:hover": {
+            background: '#1565c0',
+            color: themes.text
+          }
         }}
       >
-        <Typography variant="h5" fontWeight={600}>
-          Profile Information
-        </Typography>
-
-        {isEditing ? (
-          <Box component="form" noValidate autoComplete="off" sx={{ mt: 3 }}>
-            <TextField
-              label="Email"
-              value={profile.email}
-              fullWidth
-              margin="normal"
-              InputProps={{ readOnly: true }}
-            />
-            <TextField
-              label="Full Name"
-              name="fullName"
-              value={profile.fullName}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Date of Birth"
-              name="dob"
-              type="date"
-              value={profile.dob}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              label="Mobile Number"
-              name="mobile"
-              value={profile.mobile}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              error={!!mobileError}
-              helperText={mobileError}
-            />
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              
-              onClick={handleUpdate}
-              fullWidth
-              sx={{ mt: 3, borderRadius: 2, py: 1.2, fontWeight: 500 , background:themes.primary}}
-              disabled={!!mobileError}
-            >
-              Save Profile
-            </Button>
-          </Box>
-        ) : (
-          <Box sx={{ mt: 3 }}>
-            <ProfileField label="Email" value={profile.email} />
-            <ProfileField label="Full Name" value={profile.fullName} />
-            <ProfileField label="Date of Birth" value={profile.dob} />
-            <ProfileField label="Mobile Number" value={profile.mobile} />
-          </Box>
-        )}
-      </Box>
-
-      {/* FAB for Edit */}
-      {!isEditing && (
-        <Fab
-          
-          aria-label="edit"
-          onClick={() => setIsEditing(true)}
-          sx={{
-            background:themes.primary,
-            color:themes.text,
-            position: 'fixed',
-            bottom: 32,
-            
-            right: 32,
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
-            "&:hover":{
-              color:themes.primary
-            }
-          }}
-        >
-          <EditIcon />
-        </Fab>
-      )}
-    </Container>
-  );
+        <EditIcon />
+      </Fab>
+    )}
+  </Container>
+);
 };
 
 const ProfileField = ({ label, value }) => (
-  <Box sx={{ mb: 2 }}>
-    <Typography variant="subtitle2" color="textSecondary">
-      {label}
-    </Typography>
-    <Typography variant="body1" fontWeight={500}>
-      {value || '-'}
-    </Typography>
-  </Box>
+<Box sx={{ mb: 2 }}>
+  <Typography variant="subtitle2" color="textSecondary">
+    {label}
+  </Typography>
+  <Typography variant="body1" fontWeight={500}>
+    {value || '-'}
+  </Typography>
+</Box>
 );
 
 export default Profile;
