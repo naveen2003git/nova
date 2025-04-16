@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Auth from "./Auth/Auth";
+import ProductPage from "./Users/ProductPage/ProductPage";
+import Navbar from "./Users/Navbar/Navbar";
+import AddToCartPage from "./Users/AddToCartPage/AddToCartPage";
+import ProductDetails from "./Users/ProductDetails/ProductDetails";
+import PaymentPage from "./Users/PaymentPage/Paymentpage";
+import OrdersPage from "./Users/OrderPage/OrdersPage";
+import About from "./Users/About/About";
+import Profile from "./Users/Profile/Profile";
+import TermsOfService from "./component/TermsOfService";
+import PrivacyPolicy from "./component/privacyPolicy";
+import FAQ from "./component/FAQ";
+import { ThemeProvider } from "./ThemeContext/ThemeContext"
+import OrderDetails from "./Users/OrderPage/OrderDetails";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          {/* Public Auth Route */}
+          <Route path="/login" element={<Auth />} />
+          {/* Public Route - Product Page as Homepage */}
+          <Route path="/" element={<><Navbar /><ProductPage /></>} />
 
-export default App
+          
+
+
+          {/* User Routes wrapped with User Navbar */}
+          <Route path="/user" element={<Navbar />}>
+            <Route path="AddToCartPage" element={<AddToCartPage />} />
+            <Route path="/user/productdetails/:id" element={<ProductDetails />} />
+            <Route path="/user/payment" element={<PaymentPage />} />
+            <Route path="/user/orders" element={<OrdersPage />} />
+            <Route path="/user/order/:id" element={<OrderDetails />} />
+            <Route path="/user/about" element={<About />} />
+            <Route path="/user/profile" element={<Profile />} />
+            <Route path="/user/terms-of-service" element={<TermsOfService />} />
+            <Route path="/user/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/user/faq" element={<FAQ />} />
+          </Route>
+
+        </Routes>
+      </Router>
+    </ThemeProvider>
+
+  );
+};
+
+export default App;
